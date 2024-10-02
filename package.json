@@ -1,0 +1,15 @@
+{
+  "name": "group5version2",
+  "version": "1.0.0",
+  "description": "cpsc 499 group5 version 2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "group 5",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0",
+    "mongoose": "^8.7.0"
+  }
+}
