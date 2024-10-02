@@ -2,6 +2,7 @@
   "name": "group5version2",
   "version": "1.0.0",
   "description": "cpsc 499 group5 version 2",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
