@@ -2,31 +2,32 @@ import Router from "express";
 
 import 
 {
-    CreateUser,
+    createUser,
     GetUser,
     UpdateUserInfo,
-    DeleteUser
+    DeleteUser,
+    
 }from "../controllers/user-controller";
 
 const ClientRoute = Router();
 
-ClientRoute.post("/", async (req, res) => 
-{
-    try 
-    {
-        const newUser = req.body; // get the new user data from the request body
-        const createdUser = await CreateUser(newUser); // call the CreateUser function with the new user data
-        res.status(201).json(createdUser); // if successful, send the created user data back to the client
-    } catch (err) 
-    {
-        console.log(err); // log the error to the console
-        res.status(500).json({"status": "An error occurred while creating the user."}); // send an error message to the client
-    }
-});
+// ClientRoute.post("/", async (req, res) => 
+// {
+//     try 
+//     {
+//         const NewUser = req.body; // get the new user data from the request body
+//         const createdUser = await CreateUser(NewUser); // call the CreateUser function with the new user data
+//         res.status(201).json(createdUser); // if successful, send the created user data back to the client
+//     } catch (err) 
+//     {
+//         console.log(err); // log the error to the console
+//         res.status(500).json({"status": "An error occurred while creating the user."}); // send an error message to the client
+//     }
+// });
 
-ClientRoute.get("/", GetUser); 
+ClientRoute.post("/signup", createUser); // post request for name, email, password
 
-ClientRoute.get("/", async (req,res) =>  // get the user name from the email address.
+ClientRoute.get("/users/:email", async (req,res) =>  // get the user name from the email address.
     {
         try 
         {
@@ -42,7 +43,7 @@ ClientRoute.get("/", async (req,res) =>  // get the user name from the email add
     });
 
 // update the user information.
-ClientRoute.put("/update-user/.email", async (req,res) => 
+ClientRoute.put("/update-user/:email", async (req,res) => 
     {
         try 
         {
@@ -51,9 +52,7 @@ ClientRoute.put("/update-user/.email", async (req,res) =>
             console.log("Old Address: ", EmailAddress,"New Address:", NewEmailAddress); // log the email address and the new email address to the console.
     
             await User.findoneandupdate({EmailAddress}, NewEmailAddress); // find the user with the email address and update the email address.
-    
-            res.status(200).json({"status": "Email address updated successfully"});
-            
+                
         } catch (err) 
         {
             console.log(err); // log the error to the console.
@@ -61,6 +60,23 @@ ClientRoute.put("/update-user/.email", async (req,res) =>
         }
 });
 
-ClientRoute.delete("/", DeleteUser);
+// delete the user
+ClientRoute.delete("/:id", async (req, res) => 
+{
+    try 
+    {
+        const userId = req.params.id; // get the user ID from the route parameter
+        const deletedUser = await User.findByIdAndDelete(userId);
+        if (!deletedUser) 
+        {
+            return res.status(404).json({ error: "User not found"});
+        }
+        res.status(200).json({ message: "User deleted successfully" });
+    } catch (err) 
+    {
+        console.log(err);
+        res.status(500).json({ error: "Failed to delete user" });
+    }
+});
 
 export default ClientRoute;
