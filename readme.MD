@@ -35,5 +35,5 @@ This project is a comprehensive gym membership management application. It allows
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-repo/gym-application.git
+   git clone https://github.com/adrivnlopez/CPSC499-Group5-V2.git
    ```
