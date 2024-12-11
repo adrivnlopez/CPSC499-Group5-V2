@@ -1,0 +1,10 @@
+.CardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive layout */
+    gap: 175px; /* Increase space between grid items */
+    width: 100%; /* Full width of parent container */
+    max-width: 1250px; /* Limit maximum width */
+    margin: 50px; /* Top and bottom spacing */
+    justify-items: center; /* Center align cards horizontally */
+    padding: 50px; /* Add padding to ensure cards don't touch edges */
+  }

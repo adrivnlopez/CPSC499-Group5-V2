@@ -1,0 +1,42 @@
+@import "../styles/CardGrid.css";
+@import "../styles/Card.css";
+
+.UniPage 
+  {
+    align-items: center;
+    background-color: rgb(232, 231, 226); /* Background color */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin:auto;
+    min-height: 100vh; /* Full viewport height */
+    padding: 10px;
+  }
+
+  @media (max-width: 768px) 
+  {
+    .CardGrid 
+    {
+      grid-template-columns: 1fr; /* Stack cards vertically on small screens */
+      gap: 20px; /* Uniform space between grid items */
+    }
+  
+    .UniPage 
+    {
+      padding: 20px; /* Adjust padding for smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) 
+  {
+    .CardGrid 
+    {
+      grid-template-columns: 1fr; /* Stack cards vertically on very small screens */
+      gap: 20px; /* Uniform space between grid items */
+    }
+  
+    .UniPage 
+    {
+      padding: 10px; /* Adjust padding for very small screens */
+    }
+  }
