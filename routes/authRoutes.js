@@ -17,5 +17,4 @@ router.get('/user', protect, (req, res) => {
   }
 });
 
-
 module.exports = router;

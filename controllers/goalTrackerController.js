@@ -17,23 +17,23 @@ const getGoals = async (req, res) => {
 
 // create a new goal for the user
 const createGoal = async (req, res) => {
-    const { userId } = req.params;
-    const goalData = req.body;
+    const { userId } = req.params; 
+    const goalData = req.body; // goal details from request body
 
     try {
         const goal = new Goal({ ...goalData, userId });
         await goal.save(); 
 
-        res.status(201).json({ message: 'Goal uccesfully created' })
+        res.status(201).json({ message: 'Goal uccesfully created', goal })
     } catch(error) {
-        res.status(400).json({ message: 'Something went wrong' });
+        res.status(400).json({ message: 'Something went wrong', error: error.message });
     }
 };
 
 // update an existing goal
-const updateGoal = asyn (req, res) => {
-    const { goalId } = req.params;
-    const updates = req.body;
+const updateGoal = async (req, res) => {
+    const { goalId } = req.params; // assume goalId is passed as params
+    const updates = req.body; // updates to the goal from request body
 
     try {
         const updatedGoal = await Goal.findByIdAndUpdate(goalId, updates, { new: true });
@@ -44,4 +44,25 @@ const updateGoal = asyn (req, res) => {
     } catch (error) {
         res.status(400).json({ message: "Failed to update goal", error: error.message });
     }
+};
+
+// delete a goal
+const deleteGoal = async (req, res) => {
+    const { goalId } = req.params; // assume goalId is passed as params
+
+    try {
+        const goalDeleted = await Goal.findByIdAndDelete(goalId);
+        if (!goalDeleted) return res.status(404).json({ message: 'Goal could not be deleted' });
+
+        res.json({ message: "Goal deleted"});
+    } catch (error) {
+        res.status(500).json({ message: "error" });
+    }
+};
+
+module.exports = {
+    getGoals,
+    createGoal,
+    updateGoal,
+    deleteGoal
 };
