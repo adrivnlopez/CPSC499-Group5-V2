@@ -39,8 +39,24 @@ const updateProfile = async (req, res) =>
   }
 };
 
+// Delete user profile
+const deleteProfile = async (req, res) => 
+{
+  const { userId } = req.params; // Assume userId is passed as param
+
+  try {
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ message: 'Profile deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 module.exports = 
 {
+  deleteProfile, 
   getProfile,
   updateProfile
 };
