@@ -3,3 +3,6 @@ const { protect } = require('../middlewares/authMiddleware'); // Middleware for 
 const {  } = require('../controllers/nutritionLogController');
 const router = express.router();
 
+
+
+module.express = router;
