@@ -53,6 +53,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes); 
 app.use('/api/nutrition-logs', nutritionLogRoutes);
 app.use('/api/workout-plans', workoutPlanRoutes);
-app.use('/api/goal-tracker', goalTrackerRoutes);
+app.use('/api/goal-tracking', goalTrackerRoutes);
 
 module.exports = app; // Export the app without listening to a port here

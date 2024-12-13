@@ -5,7 +5,7 @@ const {
     createGoal,
     updateGoal,
     deleteGoal
-} = require('../controllers/nutritionLogController');
+} = require('../controllers/goalTrackerController');
 const router = express.Router();
 
 // route to fetch the goals for a user
