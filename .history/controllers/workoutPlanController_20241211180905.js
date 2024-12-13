@@ -1,23 +1,24 @@
 const WorkoutPlan = require('../models/WorkoutPlan');
 
-// Create a new workout plan
+// create new workout plan for user
 const createWorkoutPlan = async (req, res) => {
   const { userId } = req.params;
   const { name, exercises } = req.body;
 
-  if (!userId || !name || !exercises) {
-    return res.status(400).json({ message: 'User ID, name, and exercises are required.' });
-  }
-
   try {
-    const plan = await WorkoutPlan.create({ user: userId, name, exercises });
+    const plan = await WorkoutPlan.create({
+      user: userId,
+      name,
+      exercises,
+    });
+
     res.status(201).json({ message: 'Workout plan created successfully', plan });
   } catch (error) {
-    res.status(500).json({ message: 'Error creating workout plan', error: error.message });
+    res.status(500).json({ message: 'Error creating workout plan', error });
   }
 };
 
-// Get all workout plans for a user
+// get all workout plans for user
 const getWorkoutPlans = async (req, res) => {
   const { userId } = req.params;
 
@@ -25,11 +26,11 @@ const getWorkoutPlans = async (req, res) => {
     const plans = await WorkoutPlan.find({ user: userId }).sort({ createdAt: -1 });
     res.json(plans);
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving workout plans', error: error.message });
+    res.status(500).json({ message: 'Error retrieving workout plans', error });
   }
 };
 
-// Update a workout plan
+// update a specific workout plan
 const updateWorkoutPlan = async (req, res) => {
   const { planId } = req.params;
   const { name, exercises } = req.body;
@@ -38,17 +39,17 @@ const updateWorkoutPlan = async (req, res) => {
     const plan = await WorkoutPlan.findById(planId);
     if (!plan) return res.status(404).json({ message: 'Workout plan not found' });
 
-    if (name) plan.name = name;
-    if (exercises) plan.exercises = exercises;
-
+    plan.name = name ?? plan.name;
+    plan.exercises = exercises ?? plan.exercises;
     await plan.save();
+
     res.json({ message: 'Workout plan updated successfully', plan });
   } catch (error) {
-    res.status(500).json({ message: 'Error updating workout plan', error: error.message });
+    res.status(500).json({ message: 'Error updating workout plan', error });
   }
 };
 
-// Delete a workout plan
+// delete a specific workout plan
 const deleteWorkoutPlan = async (req, res) => {
   const { planId } = req.params;
 
@@ -58,8 +59,13 @@ const deleteWorkoutPlan = async (req, res) => {
 
     res.json({ message: 'Workout plan deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting workout plan', error: error.message });
+    res.status(500).json({ message: 'Error deleting workout plan', error });
   }
 };
 
-module.exports = { createWorkoutPlan, getWorkoutPlans, updateWorkoutPlan, deleteWorkoutPlan };
+module.exports = {
+  createWorkoutPlan,
+  getWorkoutPlans,
+  updateWorkoutPlan,
+  deleteWorkoutPlan,
+};
