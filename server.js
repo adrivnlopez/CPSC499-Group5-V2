@@ -7,7 +7,7 @@ app.listen(PORT, () => {  console.log(`Server running on port ${PORT}`); }); // 
 app.get('/', (req, res)=>{
     try{
         console.log(req);
-        res.status(200).send('Welcome to Track My Fitness!');
+        res.status(200).send('CPSC 499 Group Project');
     } catch(error){
         res.status(404).send('Uh oh, something went wrong!')
     } 
