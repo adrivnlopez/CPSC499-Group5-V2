@@ -6,15 +6,15 @@ const {
     updateGoal,
     deleteGoal
 } = require('../controllers/nutritionLogController');
-const router = express.router();
+const router = express.Router();
 
 // route to fetch the goals for a user
-router.get('/user/:userId/goals', getGoals);
+router.get('/user/:userId/goals', protect, getGoals);
 // route to create a new goal for the user
-router.post('/user/:userId/goals', createGoal);
+router.post('/user/:userId/goals', protect, createGoal);
 //route to update an existing goal
-router.put('/goals/:goalId', updateGoal);
+router.put('/goals/:goalId', protect, updateGoal);
 // route to delete an existing goal
-router.delete('/goals/:goalId', deleteGoal);
+router.delete('/goals/:goalId', protect, deleteGoal);
 
-module.express = router;
+module.exports = router;
