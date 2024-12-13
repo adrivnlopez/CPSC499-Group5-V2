@@ -6,6 +6,7 @@ const profileRoutes = require('./routes/profileRoutes');
 const authRoutes = require('./routes/authRoutes');
 const nutritionLogRoutes = require('./routes/nutritionLogRoutes');
 const workoutPlanRoutes = require('./routes/workoutPlanRoutes');
+const goalTrackerRoutes = require('./routes/goalTrackingRoutes');
 
 const session = require('express-session');
 const cors = require('cors'); // Import cors
@@ -52,5 +53,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes); 
 app.use('/api/nutrition-logs', nutritionLogRoutes);
 app.use('/api/workout-plans', workoutPlanRoutes);
+app.use('/api/goal-tracker', goalTrackerRoutes);
 
 module.exports = app; // Export the app without listening to a port here
