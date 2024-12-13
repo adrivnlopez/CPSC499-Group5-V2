@@ -8,6 +8,7 @@ const WorkoutPlanSchema = new mongoose.Schema({
       exerciseName: { type: String, required: true },
       sets: { type: Number, required: true },
       reps: { type: Number, required: true },
+      weight: { type: Number, required: true },  // Add weight field
     },
   ],
   createdAt: { type: Date, default: Date.now },         // Defaults to the current date

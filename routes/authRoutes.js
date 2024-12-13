@@ -1,11 +1,11 @@
 const express = require('express');
 const { registerUser, loginUser } = require('../controllers/authController');
-const { protect } = require('../middlewares/authMiddleware'); // Import protect middleware (for authentication)
+const { protect } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 // Authentication routes
-router.post('/register', registerUser);   // user registration
-router.post('/login', loginUser);         // user login
+router.post('/register', registerUser); // User registration
+router.post('/login', loginUser);       // User login
 
 // Fetch authenticated user data
 router.get('/user', protect, (req, res) => {
@@ -13,7 +13,7 @@ router.get('/user', protect, (req, res) => {
     // req.user is set by the protect middleware
     res.status(200).json(req.user);
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching user data' });
+    res.status(500).json({ message: 'Error fetching user data', error: err.message });
   }
 });
 
