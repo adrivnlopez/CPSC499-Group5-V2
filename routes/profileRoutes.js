@@ -6,6 +6,6 @@ const router = express.Router();
 // general user profile routes
 router.get('/:userId', protect, getProfile);        // get user profile
 router.put('/:userId', protect, updateProfile);     // update user profile
-router.put('/:userId', protect, deleteProfile);     // delete user Profile
+router.delete('/:userId', protect, deleteProfile);     // delete user Profile
 
 module.exports = router;
