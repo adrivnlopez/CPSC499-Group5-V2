@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <style>
+      * {
+        margin: 0;
+      }
+
+      /* Body styling */
+      body {
+        background-color: #f5f5f5;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Header styling */
+      .header {
+        background-color: #002855;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .header h1 {
+        margin-bottom: 20px;
+      }
+
+      /* Navigation button styling */
+      nav .btn {
+        border: 2px solid #002855;
+        color: #002855;
+        background-color: #fff;
+        border-radius: 5px;
+        font-weight: bold;
+        padding: 4px 10px;
+        text-decoration: none;
+        box-shadow: none;
+      }
+
+      /* Navigation button hover effect */
+      nav .btn:hover {
+        background-color: #002855;
+        color: #fff;
+        border: 2px solid #002855;
+        transition: all 0.2s ease;
+      }
+
+      /* Container styling */
+      .container {
+        margin: 20px auto;
+        max-width: 800px;
+      }
+
+      /* Card styling */
+      .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+      }
+
+      /* Card header styling */
+      .card-header {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+  </head>
+  <body>
+    <!-- Header section -->
+    <div class="header">
+      <h1>Fitness Goal Tracker</h1>
+      <nav>
+        <!-- Navigation buttons -->
+        <a href="#" class="btn">Home</a>
+        <a href="#" class="btn">User Profile</a>
+        <a href="#" class="btn">Workout Plans</a>
+        <a href="#" class="btn">Nutrition Tracking</a>
+      </nav>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+      <!-- User Information Card -->
+      <div class="card">
+        <div class="card-header">User Information</div>
+        <div class="card-body" id="userInfo">
+          <!-- Content for user information -->
+        </div>
+      </div>
+
+      <!-- Nutrition Logs Card -->
+      <div class="card">
+        <div class="card-header">Nutrition Logs</div>
+        <div class="card-body">
+          <ul id="nutritionLogs">
+            <!-- Content for nutrition logs -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Workout Plans Card -->
+      <div class="card">
+        <div class="card-header">Workout Plans</div>
+        <div class="card-body">
+          <ul id="workoutPlans">
+            <!-- Content for workout plans -->
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /**
+       * Fetch user profile information from the backend.
+       * Uses JWT token stored in localStorage to authenticate and get the user's ID.
+       */
+      // Function to fetch user profile data from the backend
+      async function fetchUserProfile() {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            alert("Token not found. Please set the token manually.");
+            return;
+          }
+
+          // Decode the token to extract user ID
+          const decoded = jwt_decode(token);
+          console.log("Decoded Token:", decoded);
+
+          // Extract the user ID from the token
+          const userId = decoded.id; // Use `id` as per the token structure
+
+          if (!userId) {
+            console.error("User ID not found in the token.");
+            alert("Invalid token. User ID is missing.");
+            return;
+          }
+
+          // Make the GET request to the backend
+          const response = await fetch(
+            `http://localhost:3000/api/profile/${userId}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (response.ok) {
+            const user = await response.json();
+            console.log("User Profile Data:", user);
+
+            // Dynamically populate the User Information section
+            document.getElementById("userInfo").innerHTML = `
+        <p><strong>Full Name:</strong> ${user.name}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Age:</strong> ${user.age || "N/A"}</p>
+      `;
+
+            // Populate the Nutrition Logs section
+            document.getElementById("nutritionLogs").innerHTML =
+              user.nutritionLogs
+                .map(
+                  (log) =>
+                    `<li>${log.calories} Calories, Protein: ${log.protein}g, Carbs: ${log.carbs}g, Fats: ${log.fats}g</li>`
+                )
+                .join("");
+
+            // Populate the Workout Plans section
+            document.getElementById("workoutPlans").innerHTML =
+              user.workoutPlans
+                .map(
+                  (plan) =>
+                    `<li>${plan.name} - Duration: ${plan.duration} weeks</li>`
+                )
+                .join("");
+          } else {
+            // Handle errors when the response is not OK
+            console.error("Failed to fetch user profile.");
+            const errorData = await response.json();
+            console.error(errorData.message);
+            alert("Error fetching user profile. Please try again.");
+          }
+        } catch (error) {
+          // Handle network or runtime errors
+          console.error("Error fetching user profile:", error.message);
+          alert("An error occurred. Check the console for details.");
+        }
+      }
+
+      // Call the fetchUserProfile function when the page loads
+      fetchUserProfile();
+    </script>
+  </body>
+</html>
