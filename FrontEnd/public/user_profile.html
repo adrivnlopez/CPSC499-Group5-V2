@@ -71,6 +71,26 @@
         font-size: 1.5rem;
         margin-bottom: 10px;
       }
+
+      /* Sign Out button styling */
+      .signout-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 5px 15px;
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .signout-btn:hover {
+        background-color: #d32f2f;
+        transition: all 0.2s ease;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
   </head>
@@ -85,6 +105,8 @@
         <a href="#" class="btn">Workout Plans</a>
         <a href="#" class="btn">Nutrition Tracking</a>
       </nav>
+      <!-- Sign Out Button -->
+      <button class="signout-btn" onclick="logoutUser()">Sign Out</button>
     </div>
 
     <!-- Main content container -->
@@ -197,6 +219,18 @@
           console.error("Error fetching user profile:", error.message);
           alert("An error occurred. Check the console for details.");
         }
+      }
+
+      /**
+       * Logs out the user by removing the token from localStorage
+       * and redirecting them to the login page.
+       */
+      function logoutUser() {
+        // Clear the token from localStorage
+        localStorage.removeItem("token");
+
+        // Redirect to the login page
+        window.location.href = "register.html"; // Replace with your login page URL
       }
 
       // Call the fetchUserProfile function when the page loads

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register</title>
+    <title>Login</title>
     <style>
       * {
         margin: 0;
@@ -52,7 +52,6 @@
         border-radius: 5px;
         font-size: 16px;
         cursor: pointer;
-        margin-bottom: 10px;
       }
       .btn:hover {
         background-color: #004080;
@@ -74,17 +73,8 @@
   </head>
   <body>
     <div class="container">
-      <h1>Register</h1>
-      <form id="registerForm">
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input
-            type="text"
-            id="name"
-            placeholder="Enter your full name"
-            required
-          />
-        </div>
+      <h1>Login</h1>
+      <form id="loginForm">
         <div class="form-group">
           <label for="email">Email</label>
           <input
@@ -103,54 +93,58 @@
             required
           />
         </div>
-        <button type="button" class="btn" onclick="registerUser()">
-          Register
-        </button>
+        <button type="button" class="btn" onclick="loginUser()">Login</button>
         <div class="link">
-          Already have an account? <a href="login.html">Login here</a>
+          Don't have an account? <a href="register.html">Register here</a>
         </div>
       </form>
     </div>
 
     <script>
       /**
-       * Function to register a new user.
-       * It sends a POST request to the backend and stores the token in localStorage.
+       * Function to log in a user.
+       * Sends a POST request with email and password to the backend.
+       * Saves the token to localStorage upon success.
        */
-      async function registerUser() {
-        const name = document.getElementById("name").value;
+      async function loginUser() {
+        // Get email and password values from input fields
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
-        const errorElement = document.getElementById("error");
+
+        // Reference to error message placeholder
+        const errorElement = document.createElement("p");
+        errorElement.style.color = "red";
 
         try {
-          const response = await fetch(
-            "http://localhost:3000/api/auth/register",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ name, email, password }),
-            }
-          );
+          // Send POST request to login route
+          const response = await fetch("http://localhost:3000/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
 
           const data = await response.json();
 
           if (response.ok) {
-            // Save token to localStorage
+            // If login is successful, save the token to localStorage
             localStorage.setItem("token", data.token);
 
             // Redirect to user profile page
             window.location.href = "user_profile.html";
           } else {
-            // Show error message
+            // Display error message on failure
             errorElement.textContent =
-              data.message || "Registration failed. Try again.";
+              data.message || "Invalid credentials. Please try again.";
+            document.getElementById("loginForm").appendChild(errorElement);
           }
         } catch (error) {
-          console.error("Error during registration:", error.message);
-          errorElement.textContent = "An error occurred. Please try again.";
+          // Handle network or server errors
+          console.error("Error during login:", error.message);
+          errorElement.textContent =
+            "An error occurred. Please check your connection.";
+          document.getElementById("loginForm").appendChild(errorElement);
         }
       }
     </script>
