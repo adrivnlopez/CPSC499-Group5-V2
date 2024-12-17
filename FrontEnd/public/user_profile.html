@@ -71,6 +71,26 @@
         font-size: 1.5rem;
         margin-bottom: 10px;
       }
+
+      /* Sign Out button styling */
+      .signout-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 5px 15px;
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .signout-btn:hover {
+        background-color: #d32f2f;
+        transition: all 0.2s ease;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
   </head>
@@ -80,11 +100,12 @@
       <h1>Fitness Goal Tracker</h1>
       <nav>
         <!-- Navigation buttons -->
-        <a href="#" class="btn">Home</a>
         <a href="#" class="btn">User Profile</a>
-        <a href="#" class="btn">Workout Plans</a>
+        <a href="workoutPlans.html" class="btn">Workout Plans</a>
         <a href="#" class="btn">Nutrition Tracking</a>
       </nav>
+      <!-- Sign Out Button -->
+      <button class="signout-btn" onclick="logoutUser()">Sign Out</button>
     </div>
 
     <!-- Main content container -->
@@ -120,32 +141,27 @@
 
     <script>
       /**
-       * Fetch user profile information from the backend.
-       * Uses JWT token stored in localStorage to authenticate and get the user's ID.
+       * Fetch user profile information and workouts from the backend.
        */
-      // Function to fetch user profile data from the backend
       async function fetchUserProfile() {
         try {
           const token = localStorage.getItem("token");
           if (!token) {
-            alert("Token not found. Please set the token manually.");
+            alert("Token not found. Please log in again.");
+            window.location.href = "register.html";
             return;
           }
 
           // Decode the token to extract user ID
           const decoded = jwt_decode(token);
-          console.log("Decoded Token:", decoded);
-
-          // Extract the user ID from the token
-          const userId = decoded.id; // Use `id` as per the token structure
+          const userId = decoded.id;
 
           if (!userId) {
-            console.error("User ID not found in the token.");
             alert("Invalid token. User ID is missing.");
             return;
           }
 
-          // Make the GET request to the backend
+          // Fetch user profile data
           const response = await fetch(
             `http://localhost:3000/api/profile/${userId}`,
             {
@@ -159,47 +175,105 @@
 
           if (response.ok) {
             const user = await response.json();
-            console.log("User Profile Data:", user);
 
-            // Dynamically populate the User Information section
+            // Populate the User Information section
             document.getElementById("userInfo").innerHTML = `
-        <p><strong>Full Name:</strong> ${user.name}</p>
-        <p><strong>Email:</strong> ${user.email}</p>
-        <p><strong>Age:</strong> ${user.age || "N/A"}</p>
-      `;
+          <p><strong>Full Name:</strong> ${user.name}</p>
+          <p><strong>Email:</strong> ${user.email}</p>
+         
+        `;
 
-            // Populate the Nutrition Logs section
+            // Populate Nutrition Logs section
             document.getElementById("nutritionLogs").innerHTML =
-              user.nutritionLogs
-                .map(
-                  (log) =>
-                    `<li>${log.calories} Calories, Protein: ${log.protein}g, Carbs: ${log.carbs}g, Fats: ${log.fats}g</li>`
-                )
-                .join("");
+              user.nutritionLogs.length > 0
+                ? user.nutritionLogs
+                    .map(
+                      (log) =>
+                        `<li>${log.calories} Calories, Protein: ${log.protein}g, Carbs: ${log.carbs}g, Fats: ${log.fats}g</li>`
+                    )
+                    .join("")
+                : "<li>No nutrition logs available.</li>";
 
-            // Populate the Workout Plans section
-            document.getElementById("workoutPlans").innerHTML =
-              user.workoutPlans
-                .map(
-                  (plan) =>
-                    `<li>${plan.name} - Duration: ${plan.duration} weeks</li>`
-                )
-                .join("");
+            // Fetch and populate Workout Plans
+            fetchWorkoutPlans(userId, token);
           } else {
-            // Handle errors when the response is not OK
-            console.error("Failed to fetch user profile.");
             const errorData = await response.json();
-            console.error(errorData.message);
-            alert("Error fetching user profile. Please try again.");
+            alert(`Error: ${errorData.message}`);
           }
         } catch (error) {
-          // Handle network or runtime errors
-          console.error("Error fetching user profile:", error.message);
-          alert("An error occurred. Check the console for details.");
+          console.error("Error fetching user profile:", error);
+          alert("An error occurred. Please check the console for details.");
         }
       }
 
-      // Call the fetchUserProfile function when the page loads
+      /**
+       * Fetch workout plans for the user and display them.
+       */
+      async function fetchWorkoutPlans(userId, token) {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/workout-plans/${userId}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            const workoutPlans = await response.json();
+
+            const workoutContainer = document.getElementById("workoutPlans");
+
+            if (workoutPlans.length === 0) {
+              workoutContainer.innerHTML = "<li>No workout plans found.</li>";
+              return;
+            }
+
+            // Map and render workouts
+            workoutContainer.innerHTML = workoutPlans
+              .map(
+                (plan) => `
+              <li>
+                <h4 style="color: #002855;">${plan.name}</h4>
+                <ul>
+                  ${plan.exercises
+                    .map(
+                      (exercise) => `
+                      <li>
+                        <strong>${exercise.exerciseName}:</strong>
+                        <div>Sets: ${exercise.sets}</div>
+                        <div>Reps: ${exercise.reps}</div>
+                        <div>Weight: ${exercise.weight}lbs</div>
+                      </li>
+                    `
+                    )
+                    .join("")}
+                </ul>
+              </li>
+            `
+              )
+              .join("");
+          } else {
+            const errorData = await response.json();
+            console.error("Failed to fetch workout plans:", errorData.message);
+          }
+        } catch (error) {
+          console.error("Error fetching workout plans:", error);
+        }
+      }
+
+      /**
+       * Logs out the user by removing the token from localStorage
+       * and redirecting them to the login page.
+       */
+      function logoutUser() {
+        localStorage.removeItem("token");
+        window.location.href = "register.html"; // Redirect to login page
+      }
+
+      // Load user profile and workouts on page load
       fetchUserProfile();
     </script>
   </body>
