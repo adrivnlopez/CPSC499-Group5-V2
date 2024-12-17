@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Goal Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 1rem;
+            background: #08284b;
+            color: white;
+            position: relative;
+        }
+
+        nav {
+            margin-top: 1rem;
+        }
+
+        .nav-button {
+            background-color: white;
+            color: #08284b;
+            border: 2px solid #08284b;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .nav-button:hover {
+            background-color: #0056b3;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        main {
+            padding: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        section h2, #daily-logs h3 {
+            text-align: center;
+            color: #08284b;
+            margin-bottom: 1rem;
+        }
+
+        form label {
+            display: block;
+            margin: 0.5rem 0 0.2rem;
+        }
+
+        form input, form select, form textarea, form button {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        #dailyLogs ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #dailyLogs ul li {
+            padding: 0.5rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        form div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        form div input {
+            width: 48%;
+        }
+
+        #goal-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        #goal-list li {
+            padding: 0.5rem;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #view-goals-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        #view-goals-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Fitness Goal Tracker</h1>
+        <nav>
+            <button class="nav-button">Home</button>
+            <button class="nav-button">User Profile</button>
+            <button class="nav-button">Workout Plans</button>
+            <button class="nav-button">Nutrition Tracking</button>
+        </nav>
+    </header>
+    
+    <main>
+        <!-- Goal Setting -->
+        <section id="goalSetting">
+            <h2>Set Your Fitness Goals</h2>
+            <form id="goal-form">
+                <label for="goal-type">Goal Type:</label>
+                <select id="goal-type" required>
+                    <option value="weight-loss">Weight Loss/Gain</option>
+                    <option value="muscleGain">Muscle Gain</option>
+                    <option value="endurance">Endurance Improvement</option>
+                </select>
+        
+                <label for="goal-description">Description:</label>
+                <textarea id="goal-description" rows="3" placeholder="Describe your goal..." required></textarea>
+        
+                <label for="goal-deadline">Deadline:</label>
+                <input type="date" id="goal-deadline" required>
+        
+                <button type="submit">Add Goal</button>
+            </form>
+            <button id="view-goals-button">View Goals</button>
+            <ul id="goal-list"></ul>
+        </section>
+        
+        <!-- Daily Tracker -->
+        <section id="daily-tracker">
+            <h2>Daily Tracker</h2>
+            <form id="tracker-form">
+                <label for="run-time-minutes">Run Time:</label>
+                <div>
+                    <input type="number" id="run-time-minutes" placeholder="Minutes" min="0">
+                    <input type="number" id="run-time-seconds" placeholder="Seconds" min="0" max="59">
+                </div>
+            
+                <label for="weight-change">Weight Change:</label>
+                <input type="number" id="weight-change" placeholder="Example -1 (lbs)" step="0.1">
+                <select id="weight-unit">
+                    <option value="kg">Kilograms</option>
+                    <option value="lbs">Pounds</option>
+                </select>
+            
+                <label for="muscle-change">Muscle Change:</label>
+                <input type="number" id="muscle-change" placeholder="Example 0.5 (lbs)" step="0.1">
+                <select id="muscle-unit">
+                    <option value="kg">Kilograms</option>
+                    <option value="lbs">Pounds</option>
+                </select>
+            
+                <button type="submit">Save Daily Input</button>
+            </form>
+            <div id="dailyLogs">
+                <h3>Daily Logs:</h3>
+                <ul id="logList"></ul>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Daily Tracker
+        const trackerForm = document.getElementById("tracker-form");
+        const logList = document.getElementById("logList");
+        // Goal Setting
+        const goalForm = document.getElementById("goal-form");
+        const goalList = document.getElementById("goal-list");
+        const viewGoalsButton = document.getElementById("view-goals-button");
+
+        // Event: Add Goal
+        goalForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // Capture goal details
+            const goalType = document.getElementById("goal-type").value;
+            const goalDescription = document.getElementById("goal-description").value;
+            const goalDeadline = document.getElementById("goal-deadline").value;
+
+            // Save goal to local storage
+            const currentGoals = JSON.parse(localStorage.getItem("goals")) || [];
+            const newGoal = {
+                type: goalType,
+                description: goalDescription,
+                deadline: goalDeadline,
+            };
+            currentGoals.push(newGoal);
+            localStorage.setItem("goals", JSON.stringify(currentGoals));
+
+            alert(`Goal Added: ${goalType} - "${goalDescription}" by ${goalDeadline}`);
+            goalForm.reset();
+        });
+
+        // Event: View Goals
+        viewGoalsButton.addEventListener("click", () => {
+            // Clear the current goal list
+            goalList.innerHTML = "";
+
+            // Load goals from local storage
+            const savedGoals = JSON.parse(localStorage.getItem("goals")) || [];
+            if (savedGoals.length === 0) {
+                goalList.innerHTML = "<li>No goals saved yet.</li>";
+                return;
+            }
+
+            // Display each goal
+            savedGoals.forEach((goal, index) => {
+                const goalEntry = document.createElement("li");
+                goalEntry.textContent = `${index + 1}. Type: ${goal.type}, Description: "${goal.description}", Deadline: ${goal.deadline}`;
+                goalList.appendChild(goalEntry);
+            });
+        });
+
+        // Load daily logs from local storage on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLogs = JSON.parse(localStorage.getItem("dailyLogs")) || [];
+            savedLogs.forEach((log) => {
+                const logEntry = document.createElement("li");
+                logEntry.textContent = log;
+                logList.appendChild(logEntry);
+            });
+        });
+
+        // Event: Add Daily Tracker Input
+        trackerForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // Get run time input
+            const runMinutes = document.getElementById("run-time-minutes").value || 0;
+            const runSeconds = document.getElementById("run-time-seconds").value || 0;
+            const runTime = `${runMinutes} mins ${runSeconds} secs`;
+
+            // Get weight change with unit
+            const weightChange = document.getElementById("weight-change").value || 0;
+            const weightUnit = document.getElementById("weight-unit").value;
+            const weightText = `${weightChange} ${weightUnit}`;
+
+            // Get muscle change with unit
+            const muscleChange = document.getElementById("muscle-change").value || 0;
+            const muscleUnit = document.getElementById("muscle-unit").value;
+            const muscleText = `${muscleChange} ${muscleUnit}`;
+
+            // Get current date
+            const currentDate = new Date().toLocaleDateString();
+
+            // Create log entry
+            const logText = `[${currentDate}] Run Time: ${runTime}, Weight Change: ${weightText}, Muscle Change: ${muscleText}`;
+            const logEntry = document.createElement("li");
+            logEntry.textContent = logText;
+            logList.appendChild(logEntry);
+
+            // Save to local storage
+            const currentLogs = JSON.parse(localStorage.getItem("dailyLogs")) || [];
+            currentLogs.push(logText);
+            localStorage.setItem("dailyLogs", JSON.stringify(currentLogs));
+
+            // Reset the form
+            trackerForm.reset();
+        });
+    </script>
+</body>
+</html>
