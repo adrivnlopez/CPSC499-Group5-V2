@@ -273,18 +273,6 @@
         window.location.href = "register.html"; // Redirect to login page
       }
 
-      /**
-       * Logs out the user by removing the token from localStorage
-       * and redirecting them to the login page.
-       */
-      function logoutUser() {
-        // Clear the token from localStorage
-        localStorage.removeItem("token");
-
-        // Redirect to the login page
-        window.location.href = "register.html"; // Replace with your login page URL
-      }
-
       // Load user profile and workouts on page load
       fetchUserProfile();
     </script>
