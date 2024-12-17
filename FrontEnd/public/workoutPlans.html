@@ -13,54 +13,6 @@
         background-color: #f5f5f5;
         font-family: Arial, sans-serif;
       }
-      /* Header styling */
-      .header {
-        background-color: #002855;
-        color: #fff;
-        padding: 20px;
-        text-align: center;
-        position: relative;
-      }
-      .header h1 {
-        margin-bottom: 20px;
-      }
-      nav .btn {
-        border: 2px solid #002855;
-        color: #002855;
-        background-color: #fff;
-        border-radius: 5px;
-        font-weight: bold;
-        padding: 6px 12px;
-        text-decoration: none;
-        margin: 0 5px;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-      nav .btn:hover {
-        background-color: #002855;
-        color: #fff;
-      }
-      nav .btn.active {
-        background-color: #002855;
-        color: #fff;
-        cursor: default;
-      }
-      /* Sign Out Button */
-      .signout-btn {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        padding: 5px 15px;
-        background-color: #f44336;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        cursor: pointer;
-        font-weight: bold;
-      }
-      .signout-btn:hover {
-        background-color: #d32f2f;
-      }
       .container {
         margin: 20px auto;
         max-width: 800px;
@@ -142,15 +94,15 @@
   </head>
   <body>
     <!-- Header -->
-    <div class="header">
-      <h1>Workout Plans</h1>
-      <nav>
-        <a href="user_profile.html" class="btn">User Profile</a>
-        <a href="workoutPlans.html" class="btn active">Workout Plans</a>
-        <a href="#" class="btn">Nutrition Tracking</a>
-      </nav>
-      <button class="signout-btn" onclick="logoutUser()">Sign Out</button>
-    </div>
+    <div id="header-container"></div>
+    <script>
+      fetch("header.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("header-container").innerHTML = data;
+        })
+        .catch((error) => console.error("Error loading header:", error));
+    </script>
 
     <div class="container">
       <!-- Form for creating workouts -->

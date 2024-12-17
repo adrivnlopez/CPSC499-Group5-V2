@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Header</title>
+    <style>
+      .header {
+        background-color: #002855;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
+      .header h1 {
+        margin-bottom: 20px;
+      }
+      nav .btn {
+        border: 2px solid #002855;
+        color: #002855;
+        background-color: #fff;
+        border-radius: 5px;
+        font-weight: bold;
+        padding: 6px 12px;
+        text-decoration: none;
+        margin: 0 5px;
+      }
+      nav .btn:hover {
+        background-color: #002855;
+        color: #fff;
+      }
+      .signout-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 5px 15px;
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .signout-btn:hover {
+        background-color: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1 id="header-title">Power Planner</h1>
+      <nav>
+        <a href="user_profile.html" class="btn">User Profile</a>
+        <a href="workoutPlans.html" class="btn">Workout Plans</a>
+        <a href="goal_page.html" class="btn">Goal Tracking</a>
+      </nav>
+      <button class="signout-btn" onclick="logout()">Sign Out</button>
+    </div>
+
+    <script>
+      function logout() {
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>
