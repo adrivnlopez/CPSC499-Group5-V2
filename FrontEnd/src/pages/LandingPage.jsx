@@ -23,9 +23,9 @@ const LandingPage = () => {
 
       {/* Main Content */}
       <main className="main-content">
-        <h1 className="title">Unified Digital Identification System</h1>
+        <h1 className="title">GymApp</h1>
         <p className="subtitle">
-          Manage your digital identity effortlessly across healthcare, education, and finances.
+          Your personal gym management app. Redirecting to login page...
         </p>
         <img
           src="/images/LandingPage.png"

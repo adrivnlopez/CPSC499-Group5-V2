@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import TopBar from '../components/TopBar';
-import BurgerMenu from '../components/BurgerMenu';
-import Card from '../components/Card';
+const API_URL = "https://cpsc499-group5-v2.onrender.com/"
 import '../styles/HomePage.css';
 
 const HomePage = () => {
@@ -21,7 +19,7 @@ const HomePage = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:5001/api/auth/user', {
+        const response = await axios.get({API_URL}/api/auth/user', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
