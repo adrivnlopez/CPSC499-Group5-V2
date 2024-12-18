@@ -181,7 +181,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:3000/api/workout-plans/${userId}`,
+            `BACKEND_URL/api/workout-plans/${userId}`,
             {
               method: "GET",
               headers: { Authorization: `Bearer ${token}` },
@@ -297,7 +297,7 @@
             if (isUpdateMode) {
               // Update existing workout
               response = await fetch(
-                `http://localhost:3000/api/workout-plans/${currentWorkoutId}`,
+                `BACKEND_URL/api/workout-plans/${currentWorkoutId}`,
                 {
                   method: "PUT",
                   headers: {
@@ -310,7 +310,7 @@
             } else {
               // Create new workout
               response = await fetch(
-                `http://localhost:3000/api/workout-plans/${userId}`,
+                `BACKEND_URL/api/workout-plans/${userId}`,
                 {
                   method: "POST",
                   headers: {
@@ -365,7 +365,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:3000/api/workout-plans/${planId}`,
+            `BACKEND_URL/api/workout-plans/${planId}`,
             {
               method: "DELETE",
               headers: { Authorization: `Bearer ${token}` },
