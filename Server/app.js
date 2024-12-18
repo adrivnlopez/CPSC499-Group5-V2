@@ -29,7 +29,7 @@ const app = express();
 // Add CORS middleware
 app.use(
   cors({
-    origin: ["http://127.0.0.1:5500", "http://localhost:3000"], //origin of frontend updated
+    origin: ["http://127.0.0.1:5500", "https://cpsc499-group5-v2.onrender.com"], //origin of frontend updated
     credentials: true, // Allow cookies or credentials
   })
 );

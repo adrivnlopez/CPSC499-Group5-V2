@@ -113,7 +113,7 @@
 
           // Fetch user profile data
           const response = await fetch(
-            `http://localhost:3000/api/profile/${userId}`,
+            `https://cpsc499-group5-v2.onrender.com/api/profile/${userId}`,
             {
               method: "GET",
               headers: {
@@ -146,7 +146,7 @@
       async function fetchWorkoutPlans(userId, token) {
         try {
           const response = await fetch(
-            `http://localhost:3000/api/workout-plans/${userId}`,
+            `https://cpsc499-group5-v2.onrender.com/api/workout-plans/${userId}`,
             {
               method: "GET",
               headers: { Authorization: `Bearer ${token}` },
@@ -186,7 +186,7 @@
       async function fetchGoals(userId, token) {
         try {
           const response = await fetch(
-            `http://localhost:3000/api/goal-tracking/user/${userId}/goals`,
+            `https://cpsc499-group5-v2.onrender.com/api/goal-tracking/user/${userId}/goals`,
             {
               method: "GET",
               headers: { Authorization: `Bearer ${token}` },
